@@ -1,13 +1,14 @@
 package models.chatClients;
 
 import models.Message;
+import models.chatClients.fileOperations.ChatFileOperations;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InMemoryChatClient implements ChatClient{ //To samé jako FileChaClient, ale data se nikam neukládají a po vypnutí programu zmizí.
+public class FileChatClient implements  ChatClient{ //Prototip, Všechno už je předělané v ApiChatClient, rozdíl je že data se ukládají lokálně do souboru.Json
     private String loggedUser;
     private List<String> loggedUsers;
     private List<Message> messages;
@@ -15,15 +16,19 @@ public class InMemoryChatClient implements ChatClient{ //To samé jako FileChaCl
     private List<ActionListener> listenersLoggedusersChanged = new ArrayList<>();
     private List<ActionListener> listenersMessagesChanged = new ArrayList<>();
 
-    public InMemoryChatClient() {
+    ChatFileOperations chatFileOperations;
+
+    public FileChatClient(ChatFileOperations chatFileOperations) {
         loggedUsers = new ArrayList<>();
-        messages = new ArrayList<>();
+        this.chatFileOperations = chatFileOperations;
+        messages = chatFileOperations.readMessages();
     }
 
     @Override
     public void sendMessage(String text) {
         messages.add(new Message(loggedUser, text));
         System.out.println("new message - " + text);
+        chatFileOperations.writeMessages(messages);
         raiseEventMessagesChanged();
     }
 
@@ -73,7 +78,7 @@ public class InMemoryChatClient implements ChatClient{ //To samé jako FileChaCl
 
     private void raiseEventLoggedUsersChanged(){
         for (ActionListener al:
-             listenersLoggedusersChanged) {
+                listenersLoggedusersChanged) {
             al.actionPerformed(new ActionEvent(this,1, "usersChanged"));
         }
     }
@@ -87,7 +92,7 @@ public class InMemoryChatClient implements ChatClient{ //To samé jako FileChaCl
 
     private void addSystemMessages(int type, String author){
         messages.add(new Message(type,author));
+        chatFileOperations.writeMessages(messages);
         raiseEventMessagesChanged();
     }
-
 }
