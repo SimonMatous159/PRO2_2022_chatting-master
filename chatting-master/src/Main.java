@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) { //spouští program
         String databaseDriver = "org.apache.derby.jdbc.EmbeddedDriver";
         String databaseUrl = "jdbc:derby:ChatClientDb_skB";
 
@@ -37,7 +37,7 @@ public class Main {
 
     }
 
-    private static void test() {
+    private static void test() { //Testová metoda na aplikaci
         ChatClient client = new InMemoryChatClient();
 
         client.login("vuca");
@@ -49,7 +49,7 @@ public class Main {
 
     }
 
-    private static List<Field> getAllField(Class<?> cls){
+    private static List<Field> getAllField(Class<?> cls){ //Testovací metoda
         List<Field> fieldList = new ArrayList<>();
         for(Field f : cls.getDeclaredFields()){
             fieldList.add(f);

@@ -4,7 +4,7 @@ import models.chatClients.ChatClient;
 
 import javax.swing.table.AbstractTableModel;
 
-public class LoggedUsersTableModel extends AbstractTableModel {
+public class LoggedUsersTableModel extends AbstractTableModel { //Model tabulky, pro přihlášené uživatele
     private ChatClient chatClient;
 
     public LoggedUsersTableModel(ChatClient chatClient){
@@ -22,12 +22,12 @@ public class LoggedUsersTableModel extends AbstractTableModel {
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
+    public Object getValueAt(int rowIndex, int columnIndex) { //vrátí název uživatele v řádku
         return chatClient.getLoggedUsers().get(rowIndex);
     }
 
     @Override
     public String getColumnName(int column) {
         return "User";
-    }
+    } //vrátí název sloupce(Username)
 }

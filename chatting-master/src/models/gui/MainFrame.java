@@ -8,12 +8,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame {  //dědí od JFrame
 
-    private ChatClient chatClient;
+    private ChatClient chatClient; //Konstruktor z ChatClient, abych se nemusel odkazovat na class.
 
-    JTextArea txtChat;
-    JTextField txtInputMessage;
+    JTextArea txtChat;  //Zprávy a vypísi přihlášení
+    JTextField txtInputMessage; //Píše se username
 
     public MainFrame(int width, int height, ChatClient chatClient) {
         super("PRO2 2022 ChatClient skB");
@@ -21,30 +21,30 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.chatClient = chatClient;
 
-        initGui();
+        initGui();  //Inicializuje vzhled
         setVisible(true);
     }
 
     private void initGui() {
-        JPanel panelMain = new JPanel(new BorderLayout());
-        panelMain.add(initLoginPanel(), BorderLayout.NORTH);
+        JPanel panelMain = new JPanel(new BorderLayout()); //BoxLayout, GridLayout.
+        panelMain.add(initLoginPanel(), BorderLayout.NORTH);  //Vytvoří další panel na kterém jsou ovládací prvky
         panelMain.add(initChatPanel(),BorderLayout.CENTER);
         panelMain.add(initMessagePanel(),BorderLayout.SOUTH);
         panelMain.add(initLoggedUsersPanel(),BorderLayout.EAST);
         add(panelMain);
     }
     private JPanel initLoginPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT)); //přidání ovládacích prvků
         panel.add(new JLabel("Username"));
-        JTextField txtInputUsername = new JTextField("",30);
+        JTextField txtInputUsername = new JTextField("",30);//konstruktor, nastavení textu a max délka
         panel.add(txtInputUsername);
         JButton btnLogin = new JButton("Login");
-        btnLogin.addActionListener(new ActionListener() {
+        btnLogin.addActionListener(new ActionListener() {  //zjišťuje jestli se neprovedla nějaké operace(delegát)
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {  //
                 String userName = txtInputUsername.getText();
-                System.out.println("clicked - " + userName);
-                if (chatClient.isAuthenticated()){
+                System.out.println("clicked - " + userName); //Píše hlášku o přihlášení do systémové konzole
+                if (chatClient.isAuthenticated()){ //Kontroluje Authentikaci
                     //logout
                     chatClient.logout();
                     btnLogin.setText("Login");
@@ -53,14 +53,14 @@ public class MainFrame extends JFrame {
                     txtInputMessage.setEnabled(false);
                 } else {
                     //login
-                    if (userName.length()<1) {
+                    if (userName.length()<1) { //zkontroluje zda je textové pole prázdné, když ne error massage
                         JOptionPane.showMessageDialog(null, "Enter you username","Error", JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     chatClient.login(userName);
                     btnLogin.setText("Logout");
-                    txtInputUsername.setEditable(false);
-                    txtChat.setEnabled(true);
+                    txtInputUsername.setEditable(false); //zabrání v editaci username
+                    txtChat.setEnabled(true); //zapne txtChat
                     txtInputMessage.setEnabled(true);
                 }
             }
@@ -82,7 +82,7 @@ public class MainFrame extends JFrame {
         /*for (int i = 0; i < 50; i++) {
             txtChat.append("Message: " + i + "\n");
         }*/
-        chatClient.addActionListenerMessagesChanged(e -> {
+        chatClient.addActionListenerMessagesChanged(e -> { //přidá ActionListenery
             refreshMessages();
         });
 
@@ -106,7 +106,7 @@ public class MainFrame extends JFrame {
         tblLoggedUsers.setModel(loggedUsersTableModel);
 
         JScrollPane scrollPane = new JScrollPane(tblLoggedUsers);
-        scrollPane.setPreferredSize(new Dimension(250,500));
+        scrollPane.setPreferredSize(new Dimension(250,500)); //Dimension je jako konstruktor, ale můžeš nastavit šířku a výšku
         panel.add(scrollPane);
 
         chatClient.addActionListenerLoggedUsersChanged(e -> {
@@ -128,10 +128,10 @@ public class MainFrame extends JFrame {
 
             //txtChat.append(txtInputMessage.getText() + "\n");
 
-            if (msgText.length() == 0) {
+            if (msgText.length() == 0) {  //kontrola délky textu
                 return;
             }
-            if (!chatClient.isAuthenticated()) {
+            if (!chatClient.isAuthenticated()) { //kontrola authentikace
                 return;
             }
             chatClient.sendMessage(msgText);
@@ -142,7 +142,8 @@ public class MainFrame extends JFrame {
 
         return panel;
     }
-    private void refreshMessages(){
+    private void refreshMessages(){ //refreshuje zprávy
+        txtChat.setText("");
         if (!chatClient.isAuthenticated())
             return;
         for (Message msg:

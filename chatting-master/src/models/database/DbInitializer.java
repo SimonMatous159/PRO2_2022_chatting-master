@@ -1,8 +1,12 @@
 package models.database;
 
+import models.Message;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class DbInitializer { //vytvoření připojení databáze
     private final String driver;
@@ -34,5 +38,6 @@ public class DbInitializer { //vytvoření připojení databáze
             e.printStackTrace();
         }
     }
+
 
 }

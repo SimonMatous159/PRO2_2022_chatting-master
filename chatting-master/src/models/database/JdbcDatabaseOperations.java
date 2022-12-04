@@ -3,6 +3,7 @@ package models.database;
 import models.Message;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcDatabaseOperations implements DataBaseOperations{ //přidání a získání zpráv z databáze.
@@ -32,8 +33,25 @@ public class JdbcDatabaseOperations implements DataBaseOperations{ //přidání 
         }
     }
 
-    @Override  //získání zprávy (Select getMassage)
-    public List<Message> getMessage() {
+    @Override
+    public List<Message> getMessage() { //získání zprávy (Select getMassage)
+        try {
+            String sql = "SELECT * from ChatMessages;";
+            ResultSet rst;
+            Connection connection = null;
+            Statement statement = connection.createStatement();
+            rst = statement.executeQuery(sql);
+            statement.close();
+            ArrayList<Message> messages = new ArrayList<>();
+            while (rst.next()) {
+                Message msg = new Message(((ResultSet) rst).getString("author"), rst.getString("text"));
+                messages.add(msg);
+            }
+            return messages;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }

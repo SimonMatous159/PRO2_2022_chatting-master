@@ -39,9 +39,9 @@ public class ApiChatClient implements ChatClient {
     public ApiChatClient() {  // construktor Apichatclientu, který inicializuje.
         loggedUsers = new ArrayList<>();
         messages = new ArrayList<>(); //inicializace listů(lepší pole, lépe se odstraňuje a přidává).
-        GsonBuilder gsonB = new GsonBuilder() // slouží k práci s date, které jsem získal()
+        GsonBuilder gsonB = new GsonBuilder() // slouží k práci s daty, které jsem získal()
                 .excludeFieldsWithoutExposeAnnotation()
-                .setPrettyPrinting(); // set user friendly file writing
+                .setPrettyPrinting();
         gsonB.registerTypeAdapter(LocalDateTime.class,new LocalDateTimeSerializer());
         gsonB.registerTypeAdapter(LocalDateTime.class,new LocalDateTimeDeserializer());
         gson = gsonB.create();
